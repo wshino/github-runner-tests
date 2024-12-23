@@ -11,6 +11,11 @@ concurrency:
   group: start-and-stop-self-hosted-runner
   cancel-in-progress: true
 
+env:
+  VM_NAME: instance-20241223-104107
+  VM_ZONE: us-central1-c
+  GCP_PROJECT: zkairdrop
+
 jobs:
   action:
     runs-on: ubuntu-latest
@@ -43,7 +48,7 @@ jobs:
       - name: Check the status of the instance
         id: check-status
         run: |
-          status=$(gcloud compute instances describe instance-20241223-104107 --zone us-central1-c --project zkairdrop)
+          status=$(gcloud compute instances describe "${{ env.VM_NAME }}" --zone "${{ env.VM_ZONE }}" --format="get(status)" --project ${{ env.GCP_PROJECT }})
           # set need to update desired status
           if [ "${{ steps.determine-action.outputs.action }}" == 'start' ] && [ "$status" == 'TERMINATED' ]; then
             echo "need_to_update=true" >> "$GITHUB_OUTPUT"
@@ -57,4 +62,5 @@ jobs:
         if: steps.check-status.outputs.need_to_update == 'true'
         run: |
           echo "${{ steps.determine-action.outputs.action }} instance..."
-          gcloud compute instances "${{ steps.determine-action.outputs.action }}" instance-20241223-104107 --zone us-central1-c --project zkairdrop --async
+          gcloud compute instances "${{ steps.determine-action.outputs.action }}" "${{ env.VM_NAME }}" --zone "${{ env.VM_ZONE }}" --project ${{ env.GCP_PROJECT }} --async
+  
