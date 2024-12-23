@@ -1,0 +1,13 @@
+name: hello-world
+
+on:
+  push:
+    branches:
+      - main  # You can change this to any branch you want to trigger the workflow
+
+jobs:
+  say-hello:
+    runs-on: self-hosted  # This specifies that the job should run on a self-hosted runner
+    steps:
+      - name: Print Hello
+        run: echo "Hello"
