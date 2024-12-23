@@ -39,7 +39,7 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v2'
         with:
           version: '>= 363.0.0'
-
+  
       - name: Check the status of the instance
         id: check-status
         run: |
@@ -57,4 +57,4 @@ jobs:
         if: steps.check-status.outputs.need_to_update == 'true'
         run: |
           echo "${{ steps.determine-action.outputs.action }} instance..."
-          gcloud compute instances "${{ steps.determine-action.outputs.action }}" "${{ env.VM_NAME }}" --zone "${{ env.VM_ZONE }}" --project ${{ env.GCP_PROJECT }} --async
+          gcloud compute instances "${{ steps.determine-action.outputs.action }}" instance-20241223-104107 --zone us-central1-c --project zkairdrop --async
