@@ -10,4 +10,6 @@ jobs:
     runs-on: self-hosted  # This specifies that the job should run on a self-hosted runner
     steps:
       - name: Print Hello
-        run: uname -a
+        run: |
+          uname -a
+          sleep 60
